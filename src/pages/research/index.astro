@@ -1,0 +1,305 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const papers = (await getCollection('research')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const getPath = (path: string) => {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return `${base}${path.startsWith('/') ? path : '/' + path}`;
+};
+---
+
+<Layout title="Research | Ranil Mukesh">
+  <section class="container section fade-in hero-spacing">
+    <div class="section-header">
+      <div class="page-label">Research Portfolio</div>
+      <h1 class="page-title">Publications & Pre-prints</h1>
+      <p class="page-subtitle">
+        Academic papers, architecture reports, and technical research — served directly from this repository via Fastly's edge CDN.
+      </p>
+    </div>
+
+    <div class="papers-grid">
+      {papers.map((paper) => (
+        <a
+          href={getPath(paper.data.pdfUrl)}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="paper-card"
+          id={`paper-${paper.slug}`}
+        >
+          <div class="paper-card-inner">
+            <div class="paper-meta">
+              <span class="venue-badge">{paper.data.venue}</span>
+              <span class="paper-date">
+                {paper.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+              </span>
+            </div>
+
+            <div class="paper-title-row">
+              <h2 class="paper-title">{paper.data.title}</h2>
+              <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+
+            {paper.data.abstract && (
+              <p class="paper-abstract">{paper.data.abstract}</p>
+            )}
+
+            <div class="paper-footer">
+              {paper.data.tags && paper.data.tags.length > 0 && (
+                <div class="tags-row">
+                  {paper.data.tags.map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <div class="action-links">
+                <span class="action-link pdf-link">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                  View PDF
+                </span>
+                {paper.data.githubUrl && (
+                  <a
+                    href={paper.data.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="action-link github-link"
+                    onclick="event.stopPropagation()"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                    Code
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-spacing {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-spacing {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+  }
+
+  /* Page header */
+  .section-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2rem;
+  }
+
+  .page-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .page-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem 0;
+    line-height: 1.1;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 55ch;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Papers grid */
+  .papers-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Paper card */
+  .paper-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .paper-card-inner {
+    padding: 1.75rem 0;
+    transition: padding-left 0.2s ease;
+  }
+
+  .paper-card:hover .paper-card-inner {
+    padding-left: 0.75rem;
+  }
+
+  .paper-card:hover {
+    border-color: var(--text);
+  }
+
+  /* Meta row */
+  .paper-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .venue-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--border);
+    color: var(--text-muted);
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .paper-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  /* Title row */
+  .paper-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .paper-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.45;
+    transition: color 0.2s;
+    flex: 1;
+  }
+
+  .paper-card:hover .paper-title {
+    color: var(--text-muted);
+  }
+
+  .external-icon {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    transition: color 0.2s;
+  }
+
+  .paper-card:hover .external-icon {
+    color: var(--text);
+  }
+
+  /* Abstract */
+  .paper-abstract {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 72ch;
+    margin: 0 0 1.25rem 0;
+  }
+
+  /* Footer */
+  .paper-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Tags */
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* Action links */
+  .action-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .action-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .action-link:hover {
+    color: var(--text);
+  }
+
+  .github-link {
+    border-bottom: none;
+  }
+
+  @media (max-width: 640px) {
+    .paper-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+    }
+  }
+
+  /* Fade-in animation */
+  .fade-in {
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
