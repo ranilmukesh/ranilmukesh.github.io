@@ -15,8 +15,8 @@ const research = defineCollection({
     type: 'content',
     schema: z.object({
         title: z.string(),
-        venue: z.string(),
-        date: z.coerce.date(),
+        venue: z.string().optional(),
+        date: z.coerce.date().optional(),
         pdfUrl: z.string(),
         githubUrl: z.string().optional(),
         abstract: z.string().optional(),
