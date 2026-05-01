@@ -1,10 +1,8 @@
 ---
-title: "3D Brain Tumor Segmentation with Hybrid Attention-Diffusion Transformers"
-venue: "Medical AI Research 2026"
-date: 2026-03-01
-pdfUrl: "/papers/Brain Tumor3d 2026.pdf"
-abstract: "A hybrid architecture combining volumetric attention mechanisms with denoising diffusion probabilistic models for precise 3D brain tumour segmentation in clinical MRI."
-tags: ["Medical AI", "3D Segmentation", "Diffusion Models", "Transformers", "MRI"]
+title: "Generative Causal-Curriculum: A Privacy-Preserving Federated Framework for Synthetic Hard-Example Mining in Brain Tumor Segmentation"
+pdfUrl: "/papers/Brain-Tumor3d-2026.pdf"
+abstract: "This work proposes a federated brain tumor segmentation framework that turns model failure patterns into anonymous causal error vectors instead of sharing raw medical images. A server-side latent diffusion model then generates synthetic hard examples that specifically target those blind spots, while MO-DGPO and TreeGRPO make the optimization more stable and reduce generation overhead for practical federated training."
+tags: ["Federated Learning", "Brain Tumor Segmentation", "Diffusion Models", "Causal Inference", "Medical Imaging"]
 ---
 
-A hybrid attention-diffusion transformer architecture for volumetric brain tumour segmentation. The model fuses spatial attention with a DDPM prior to sharpen boundary delineation in multi-modal clinical MRI scans.
+The core idea is to stop relying on generic augmentation and instead create synthetic tumor patches that reflect exactly where the segmentation model is failing, such as fuzzy boundaries or low-contrast regions. That makes the framework especially relevant for privacy-sensitive hospitals dealing with rare tumor sub-regions, where class imbalance and non-IID data make conventional federated learning perform poorly.

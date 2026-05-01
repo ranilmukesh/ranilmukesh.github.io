@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const papers = (await getCollection('research')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+  (a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0)
 );
 
 const getPath = (path: string) => {
@@ -33,10 +33,17 @@ const getPath = (path: string) => {
         >
           <div class="paper-card-inner">
             <div class="paper-meta">
-              <span class="venue-badge">{paper.data.venue}</span>
-              <span class="paper-date">
-                {paper.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-              </span>
+              {paper.data.venue && (
+                <span class="venue-badge">{paper.data.venue}</span>
+              )}
+              {paper.data.date && (
+                <span class="paper-date">
+                  {paper.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+                </span>
+              )}
+              {!paper.data.venue && !paper.data.date && (
+                <span class="venue-badge preprint">Pre-print</span>
+              )}
             </div>
 
             <div class="paper-title-row">

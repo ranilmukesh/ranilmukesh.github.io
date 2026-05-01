@@ -1,10 +1,8 @@
 ---
-title: "New3D: Neural Radiance Field Acceleration for Real-Time 3D Scene Reconstruction"
-venue: "3D Vision Research 2026"
-date: 2026-02-01
+title: "BrepHCC: Lightweight Cross-Modal B-Rep Point Fusion with Hierarchical Contrastive Clustering for Non-Categorical 3D Jewelry CAD Organization"
 pdfUrl: "/papers/new3d.pdf"
-abstract: "New3D proposes a factorised feature-grid representation and lightweight MLP decoder to achieve real-time NeRF rendering on commodity hardware."
-tags: ["NeRF", "3D Reconstruction", "Real-Time Rendering", "Neural Radiance Fields"]
+abstract: "BrepHCC is an unsupervised 3D CAD clustering framework built for large jewelry design repositories, where visual similarity alone is not enough to capture style, topology, and manufacturing structure. It fuses native Rhino B-Rep topology with dense point-cloud features through a lightweight top-2 mixture-of-experts router and trains with a hierarchical contrastive clustering loss that preserves geometric detail, curvature patterns, and cross-model similarity."
+tags: ["3D CAD", "B-Rep", "Point Clouds", "Clustering", "Jewelry Design"]
 ---
 
-New3D accelerates Neural Radiance Field rendering by factorising scene representation into compact triplane feature grids and pairing them with a lightweight MLP decoder. The approach achieves interactive frame rates on standard GPUs while preserving photorealistic quality.
+This work is valuable because it keeps the original CAD topology instead of throwing it away during point sampling, which means the model can reason about exact surfaces, edges, and adjacency relationships. For jewelry catalogs, that is useful for grouping similar designs, finding near-duplicates, and organizing massive archives without manual labeling.
