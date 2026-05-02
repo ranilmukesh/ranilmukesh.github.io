@@ -16,6 +16,9 @@ import Footer from '../components/Footer.astro';
     <title>{title}</title>
     <ViewTransitions />
     
+    <!-- KaTeX CSS for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+    
     <!-- Theme Script - runs BEFORE page renders to prevent flash -->
     <script is:inline>
       // This runs on every page load/navigation
@@ -55,6 +58,29 @@ import Footer from '../components/Footer.astro';
       
       // Apply theme after page loads
       document.addEventListener('astro:page-load', applyStoredTheme);
+    </script>
+    
+    <!-- Mermaid.js for Chart Rendering -->
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: false, theme: 'base' });
+      
+      document.addEventListener('astro:page-load', () => {
+        const blocks = document.querySelectorAll('.mermaid, pre > code.language-mermaid');
+        blocks.forEach((block) => {
+          if (block.tagName.toLowerCase() === 'code') {
+            const container = document.createElement('div');
+            container.className = 'mermaid';
+            container.innerHTML = block.textContent;
+            if (block.parentElement.tagName.toLowerCase() === 'pre') {
+              block.parentElement.replaceWith(container);
+            } else {
+              block.replaceWith(container);
+            }
+          }
+        });
+        mermaid.run();
+      });
     </script>
   </body>
 </html>
