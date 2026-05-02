@@ -313,3 +313,19 @@ The CMake build system (`CMakeLists.txt`) natively handles architecture flags. F
 ## Conclusion
 
 The combination of PFlash and DFlash represents a fundamental paradigm shift. We no longer have to wait for next-generation silicon to achieve real-time, zero-lag inference on massive models. Open-source initiatives like the Lucebox Hub prove that by manually rewriting LLM software, optimizing CUDA kernels, engineering pure C++ graph representations, and employing cutting-edge speculative decoding and block-sparse attention, the hardware sitting on our desks today is already more than capable of powering the AI of tomorrow.
+
+---
+
+## References
+
+**Lucebox Hub**
+* Lucebox GitHub Repository: [https://github.com/Luce-Org/lucebox-hub](https://github.com/Luce-Org/lucebox-hub)
+* Lucebox Blog: [https://www.lucebox.com/blog](https://www.lucebox.com/blog)
+
+**PFlash (FlashPrefill)**
+* Research Paper: [FlashPrefill: Instantaneous Pattern Discovery and Thresholding for Ultra-Fast Long-Context Prefilling](https://arxiv.org/abs/2603.06199)
+* GitHub Repository: [https://github.com/qhfan/FlashPrefill](https://github.com/qhfan/FlashPrefill)
+
+**DFlash**
+* Research Paper: [DFlash: Block-Diffusion Speculative Decoding](https://arxiv.org/abs/2602.06036)
+* GitHub Repository: [https://github.com/z-lab/dflash](https://github.com/z-lab/dflash)
