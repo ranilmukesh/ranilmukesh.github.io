@@ -1,6 +1,6 @@
 ---
 title: "Signed and Sealed: Protocol-Level Isolation with Cryptographic Integrity (PLICI) for Secure LLM Agents"
-pdfUrl: "/papers/PLICI.pdf"
+pdfUrl: "/papers/PLICI-flatten.pdf"
 abstract: "PLICI is a deterministic security middleware for LLM agents that shifts defense away from fragile prompt-level heuristics toward verifiable protocol enforcement. It uses session-scoped Ed25519 signatures to verify data origin, schema-locked enclaves to isolate tool payloads before the agent reads them, and an NLI-based semantic filter to catch logic hijacking, sharply reducing attack success while keeping latency low enough for real-time agent systems."
 tags: ["LLM Security", "Prompt Injection", "Cryptography", "MCP", "Agentic AI"]
 ---

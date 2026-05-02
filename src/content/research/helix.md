@@ -1,6 +1,6 @@
 ---
 title: "HelixVantage: Context-Aware Medical Orchestration via Semantic IoT-Edge Fusion and Dynamic Neural Routing"
-pdfUrl: "/papers/helixNew.pdf"
+pdfUrl: "/papers/helixNew-flatten.pdf"
 abstract: "HelixVantage is a hierarchical medical AI orchestration system that grounds language-based reasoning in live physiological signals rather than relying only on static text retrieval. It converts edge sensor streams into HL7 FHIR observations, combines those signals with user queries through a context-aware router, and applies a safety-oriented regularizer so the final response stays closer to clinical guidelines while reducing hallucinations."
 tags: ["IoMT", "Healthcare AI", "HL7 FHIR", "Dynamic Routing", "Medical Safety"]
 ---
