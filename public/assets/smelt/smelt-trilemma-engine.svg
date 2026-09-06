@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .card-bg { fill: #1e293b; stroke: #334155; stroke-width: 1.5; rx: 12px; }
+      .card-danger { fill: #1e1b2e; stroke: #f43f5e; stroke-width: 1.5; rx: 12px; }
+      .card-success { fill: #132e29; stroke: #10b981; stroke-width: 1.5; rx: 12px; }
+      .text-title { font-family: system-ui, -apple-system, sans-serif; font-size: 20px; font-weight: 700; fill: #f8fafc; }
+      .text-subtitle { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; fill: #94a3b8; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" class="bg" rx="16" />
+
+  <!-- Header -->
+  <text x="400" y="40" text-anchor="middle" class="text-title">The Compute-Matching Trilemma</text>
+  <text x="400" y="64" text-anchor="middle" class="text-subtitle">Why Dense Looping Fails vs. How SMELT MoE Looping Succeeds</text>
+
+  <!-- Left Box: Dense Looping -->
+  <g transform="translate(30, 90)">
+    <rect width="355" height="270" class="card-danger" />
+    <text x="177" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#f43f5e">Dense Model Looping (Failed)</text>
+    
+    <rect x="20" y="55" width="315" height="42" rx="6" fill="#291e2f" stroke="#e11d48" stroke-width="1" />
+    <text x="35" y="80" font-family="system-ui, sans-serif" font-size="13" fill="#fda4af">Narrow Width H → FLOPs Matched (1.0x)</text>
+
+    <rect x="20" y="110" width="315" height="42" rx="6" fill="#3f1d24" stroke="#f43f5e" stroke-width="1" />
+    <text x="35" y="135" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#fecdd3">❌ Stored Parameters Destroyed (-33.3%)</text>
+
+    <rect x="20" y="165" width="315" height="42" rx="6" fill="#291e2f" stroke="#e11d48" stroke-width="1" />
+    <text x="35" y="190" font-family="system-ui, sans-serif" font-size="13" fill="#fda4af">Sublinear Depth Returns (r^0.46 Equiv)</text>
+
+    <text x="177" y="240" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#fb7185">Outcome: Loses to Unlooped Baseline</text>
+  </g>
+
+  <!-- Right Box: SMELT MoE Looping -->
+  <g transform="translate(415, 90)">
+    <rect width="355" height="270" class="card-success" />
+    <text x="177" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#10b981">SMELT MoE Looping (Succeeds)</text>
+    
+    <rect x="20" y="55" width="315" height="42" rx="6" fill="#14382c" stroke="#059669" stroke-width="1" />
+    <text x="35" y="80" font-family="system-ui, sans-serif" font-size="13" fill="#6ee7b7">Narrow Width H → FLOPs Matched (1.0x)</text>
+
+    <rect x="20" y="110" width="315" height="42" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+    <text x="35" y="135" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#a7f3d0">✅ Add MoE Experts E → 100% Parameter Parity</text>
+
+    <rect x="20" y="165" width="315" height="42" rx="6" fill="#14382c" stroke="#059669" stroke-width="1" />
+    <text x="35" y="190" font-family="system-ui, sans-serif" font-size="13" fill="#6ee7b7">GQA Geometry Calibrated → 1.0x KV Cache</text>
+
+    <text x="177" y="240" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#34d399">Outcome: 6.8%–18.0% Compute Frontier Gain!</text>
+  </g>
+
+  <!-- Bottom Budget Badges -->
+  <g transform="translate(50, 390)">
+    <rect width="700" height="60" class="card-bg" />
+    <circle cx="40" cy="30" r="14" fill="#6366f1" />
+    <text x="40" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">3</text>
+    <text x="70" y="26" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc">Trilemma Budget Matching Parity:</text>
+    <text x="70" y="44" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">Active FLOPs (&lt;3.9% diff)  |  Total Stored Params (&lt;1.0% diff)  |  Serving KV Cache (&lt;3.6% diff)</text>
+  </g>
+</svg>

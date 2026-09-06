@@ -127,6 +127,48 @@ const { Content } = await post.render();
     border: 1px solid var(--border);
   }
 
+  /* Images styling */
+  .post-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+    border-radius: 8px;
+  }
+
+  /* Table styling */
+  .post-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.95rem;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .post-content :global(th),
+  .post-content :global(td) {
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .post-content :global(th) {
+    background-color: var(--bg-secondary);
+    font-weight: 600;
+  }
+
+  /* List styling */
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
   .back-link {
     margin-top: var(--space-xl);
     text-align: center;

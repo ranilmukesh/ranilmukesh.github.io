@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0f172a; }
+      .text-title { font-family: system-ui, -apple-system, sans-serif; font-size: 20px; font-weight: 700; fill: #f8fafc; }
+      .text-subtitle { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; fill: #94a3b8; }
+      .card-bg { fill: #1e293b; stroke: #334155; stroke-width: 1.5; rx: 12px; }
+      .bar-sink { fill: #f43f5e; rx: 4px; }
+      .bar-content { fill: #10b981; rx: 4px; }
+      .bar-bg { fill: #334155; rx: 4px; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" class="bg" rx="16" />
+
+  <!-- Header -->
+  <text x="400" y="40" text-anchor="middle" class="text-title">Mechanistic Breakthrough: Attention Sink Dissipation</text>
+  <text x="400" y="64" text-anchor="middle" class="text-subtitle">Pass 1 vs. Pass 2 Attention Probability Mass Redistribution</text>
+
+  <!-- Left Box: Pass 1 -->
+  <g transform="translate(40, 95)">
+    <rect width="340" height="260" class="card-bg" />
+    <text x="170" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#f43f5e">Visit 1: Clinging to Crutch</text>
+    
+    <!-- BOS Sink Bar -->
+    <text x="25" y="75" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#cbd5e1">BOS Sink Token (&lt;BOS&gt;): 60% Mass</text>
+    <rect x="25" y="85" width="290" height="24" class="bar-bg" />
+    <rect x="25" y="85" width="174" height="24" class="bar-sink" />
+
+    <!-- Content Bar -->
+    <text x="25" y="145" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#cbd5e1">Semantic Content &amp; Code: 24% Mass</text>
+    <rect x="25" y="155" width="290" height="24" class="bar-bg" />
+    <rect x="25" y="155" width="70" height="24" class="bar-content" opacity="0.6" />
+
+    <text x="170" y="225" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">Initial pass clutches podium when unsure.</text>
+  </g>
+
+  <!-- Right Box: Pass 2 -->
+  <g transform="translate(420, 95)">
+    <rect width="340" height="260" class="card-bg" stroke="#10b981" stroke-width="2" />
+    <text x="170" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#10b981">Visit 2: Podium Dropped!</text>
+    
+    <!-- BOS Sink Bar -->
+    <text x="25" y="75" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#cbd5e1">BOS Sink Token (&lt;BOS&gt;): 2% Mass (Dissipated!)</text>
+    <rect x="25" y="85" width="290" height="24" class="bar-bg" />
+    <rect x="25" y="85" width="6" height="24" fill="#64748b" rx="4" />
+
+    <!-- Content Bar -->
+    <text x="25" y="145" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#a7f3d0">Semantic Content &amp; Code: 85% Mass (3.5x!)</text>
+    <rect x="25" y="155" width="290" height="24" class="bar-bg" />
+    <rect x="25" y="155" width="246" height="24" class="bar-content" />
+
+    <text x="170" y="225" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#6ee7b7">Attention mass freed &amp; redirected to content!</text>
+  </g>
+
+  <!-- Bottom Coordinates Bar -->
+  <g transform="translate(40, 375)">
+    <rect width="720" height="60" fill="#1e293b" stroke="#6366f1" stroke-width="1.5" rx="8" />
+    <text x="360" y="26" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#f8fafc">Q/K Retrieval Coordinates vs. V Projection Shifts:</text>
+    <text x="360" y="46" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#cbd5e1">Q, K Cosine Similarity: <tspan font-weight="700" fill="#818cf8">0.89 – 0.93</tspan> (Locked "Where to Look")  |  V Cosine Similarity: <tspan font-weight="700" fill="#f43f5e">0.65 – 0.74</tspan> (Updated "What to Read")</text>
+  </g>
+</svg>
