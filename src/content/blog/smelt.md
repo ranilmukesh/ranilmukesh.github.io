@@ -151,11 +151,11 @@ Here is the paper’s coolest mechanistic discovery:
 
 When comparing an unlooped baseline with a looped Transformer, three distinct physical resources dictate real-world deployment viability. Hiding or inflating any of these three invalidates the comparison:
 
-$$\begin{aligned}
-\text{1. Active Compute Budget:} \quad & C_{\text{token}} \propto L_{\text{exec}} \cdot H^2 + \text{MoE Top-}k \text{ FLOPs} \\
-\text{2. Knowledge Capacity Budget:} \quad & N_{\text{non-emb}} \approx L_{\text{phys}} \cdot \left( d_{\text{attn\_weights}} + E_{\text{total}} \cdot d_{\text{expert\_weights}} \right) \\
-\text{3. Serving Memory Budget:} \quad & M_{\text{KV}} \propto L_{\text{exec}} \cdot N_{\text{kv\_heads}} \cdot d_{\text{head}} \cdot N_{\text{ctx}}
-\end{aligned}$$
+$\text{1. Active Compute Budget:} \quad C_{\text{token}} \propto L_{\text{exec}} \cdot H^2 + \text{MoE Top-}k \text{ FLOPs}$
+
+$\text{2. Knowledge Capacity Budget:} \quad N_{\text{non-emb}} \approx L_{\text{phys}} \cdot (d_{\text{attn\_weights}} + E_{\text{total}} \cdot d_{\text{expert\_weights}})$
+
+$\text{3. Serving Memory Budget:} \quad M_{\text{KV}} \propto L_{\text{exec}} \cdot N_{\text{kv\_heads}} \cdot d_{\text{head}} \cdot N_{\text{ctx}}$
 
 ![The Compute-Matching Trilemma: Dense vs SMELT MoE Looping](/assets/smelt/smelt-trilemma-engine.svg)
 
@@ -216,7 +216,7 @@ To understand how SMELT executes 18 effective layers on a 12-layer physical budg
 #### Forward & Backward FLOP Accounting per Token
 For sequence length $N_{\text{ctx}}$, hidden dimension $H$, query heads $N_Q$, key/value heads $N_{\text{KV}}$, head dimension $d_k$, active experts $k$, total experts $E_{\text{total}}$, and expert intermediate dimension $d_{\text{ffn}}$, the exact single-pass forward FLOPs per token across $L_{\text{exec}}$ executed layers is:
 
-$$F_{\text{forward}} = L_{\text{exec}} \cdot \left[ \underbrace{2H(N_Q d_k + 2 N_{\text{KV}} d_k + N_Q d_k)}_{\text{Q, K, V, O projections}} + \underbrace{4 N_Q N_{\text{ctx}} d_k}_{\text{Attention Scores \& Context}} + \underbrace{2H E_{\text{total}}}_{\text{Router Gating}} + \underbrace{4 k H d_{\text{ffn}}}_{\text{Top-}k \text{ MoE FFN}} \right]$$
+$$F_{\text{forward}} = L_{\text{exec}} \cdot \left[ \underbrace{2H(N_Q d_k + 2 N_{\text{KV}} d_k + N_Q d_k)}_{\text{Q, K, V, O projections}} + \underbrace{4 N_Q N_{\text{ctx}} d_k}_{\text{Attention Scores and Context}} + \underbrace{2H E_{\text{total}}}_{\text{Router Gating}} + \underbrace{4 k H d_{\text{ffn}}}_{\text{Top-}k \text{ MoE FFN}} \right]$$
 
 $$F_{\text{train}} \approx 3 \cdot F_{\text{forward}} \quad (1 \text{ forward pass} + 2 \text{ backward passes})$$
 
@@ -263,10 +263,9 @@ SMELT dampens every sub-layer residual update within the looped segment by $\fra
 $$\mathbf{x}_{l}^{(t)} = \mathbf{x}_{l}^{(t-1)} + \frac{1}{r} \mathcal{F}_l\left( \mathbf{x}_{l}^{(t-1)} \right)$$
 
 Explicitly, inside the looped middle span:
-$$\begin{aligned}
-\mathbf{x}_{\text{attn}} &= \mathbf{x}_{\text{in}} + \frac{1}{r} \text{Attention}\left( \text{RMSNorm}(\mathbf{x}_{\text{in}}) \right) \\
-\mathbf{x}_{\text{out}} &= \mathbf{x}_{\text{attn}} + \frac{1}{r} \text{MoE}\left( \text{RMSNorm}(\mathbf{x}_{\text{attn}}) \right)
-\end{aligned}$$
+$\mathbf{x}_{\text{attn}} = \mathbf{x}_{\text{in}} + \frac{1}{r} \text{Attention}\left( \text{RMSNorm}(\mathbf{x}_{\text{in}}) \right)$
+
+$\mathbf{x}_{\text{out}} = \mathbf{x}_{\text{attn}} + \frac{1}{r} \text{MoE}\left( \text{RMSNorm}(\mathbf{x}_{\text{attn}}) \right)$
 
 This $0.5\times$ factor bounds the variance expansion rate $\frac{d}{dt} \text{Var}(\mathbf{x}^{(t)})$, ensuring gradient norm stability across repeated backpropagation paths.
 
@@ -299,10 +298,9 @@ Balancing capacity FLOPs $F^*$ and token count $D^* = C / F^*$ yields the comput
 
 $$L^*(C, S) = \mathcal{L}_0 + \text{Prefactor}(S) \cdot C^{-\gamma}, \quad \text{where } \gamma = \frac{a \cdot c}{a + c}$$
 
-$$\begin{aligned}
-\gamma_{\text{Baseline}} &= \frac{0.3703 \times 0.6594}{0.3703 + 0.6594} = \mathbf{0.2371} \\
-\gamma_{\text{SMELT}} &= \frac{0.3892 \times 0.7011}{0.3892 + 0.7011} = \mathbf{0.2502} \quad (+5.5\% \text{ steeper drop!})
-\end{aligned}$$
+$\gamma_{\text{Baseline}} = \frac{0.3703 \times 0.6594}{0.3703 + 0.6594} = \mathbf{0.2371}$
+
+$\gamma_{\text{SMELT}} = \frac{0.3892 \times 0.7011}{0.3892 + 0.7011} = \mathbf{0.2502} \quad (+5.5\% \text{ steeper drop!})$
 
 #### Compute Efficiency Gain (CE Gain) Derivation
 CE Gain measures the percentage of training compute SMELT saves over the baseline to hit identical validation loss:
