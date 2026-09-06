@@ -12,8 +12,9 @@ const getPath = (path) => {
         <a href={getPath('/blog')}>Articles</a>
         <a href={getPath('/research')}>Research</a>
       </nav>
-      <button id="theme-toggle" aria-label="Toggle Dark Mode">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <button id="theme-toggle" type="button" aria-label="Toggle Theme" title="Toggle Theme">
+        <!-- Sun Icon (Light Mode) -->
+        <svg class="theme-icon sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"></circle>
           <line x1="12" y1="1" x2="12" y2="3"></line>
           <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -24,8 +25,15 @@ const getPath = (path) => {
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Moon Icon (Dark Mode) -->
+        <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <!-- System Icon (Auto Mode) -->
+        <svg class="theme-icon system-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
         </svg>
       </button>
     </div>
@@ -113,48 +121,98 @@ const getPath = (path) => {
     background-color: var(--border);
   }
 
-  .sun-icon, .moon-icon {
+  .theme-icon {
     display: none;
   }
 
-  /* Show moon in light mode (to switch to dark) */
-  :global(html[data-theme="light"]) .moon-icon {
+  /* Show icon corresponding to current setting */
+  :global(html[data-theme-setting="light"]) .sun-icon {
     display: block;
   }
 
-  /* Show sun in dark mode (to switch to light) */
-  :global(html[data-theme="dark"]) .sun-icon {
+  :global(html[data-theme-setting="dark"]) .moon-icon {
     display: block;
   }
 
-  /* Fallback: if no theme set, show moon (assume light) */
-  :global(html:not([data-theme])) .moon-icon {
+  :global(html[data-theme-setting="system"]) .system-icon {
+    display: block;
+  }
+
+  /* Fallbacks when data-theme-setting is absent */
+  :global(html:not([data-theme-setting])[data-theme="light"]) .sun-icon {
+    display: block;
+  }
+  :global(html:not([data-theme-setting])[data-theme="dark"]) .moon-icon {
+    display: block;
+  }
+  :global(html:not([data-theme-setting]):not([data-theme])) .system-icon {
     display: block;
   }
 </style>
 
 <script>
-  // Theme toggle click handler
+  function updateToggleAccessibility(setting, effectiveTheme) {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    
+    if (setting === 'light') {
+      btn.setAttribute('aria-label', 'Theme: Light Mode. Click to switch to Dark Mode.');
+      btn.setAttribute('title', 'Theme: Light Mode (Click for Dark)');
+    } else if (setting === 'dark') {
+      btn.setAttribute('aria-label', 'Theme: Dark Mode. Click to switch to System Sync.');
+      btn.setAttribute('title', 'Theme: Dark Mode (Click for System Auto)');
+    } else {
+      const modeLabel = effectiveTheme === 'dark' ? 'Dark' : 'Light';
+      btn.setAttribute('aria-label', `Theme: System Auto (${modeLabel}). Click to switch to Light Mode.`);
+      btn.setAttribute('title', `Theme: System Auto (${modeLabel}) (Click for Light)`);
+    }
+  }
+
+  function applyThemeSetting(nextSetting) {
+    localStorage.setItem('theme', nextSetting);
+    const isDark = nextSetting === 'system'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : nextSetting === 'dark';
+    const effectiveTheme = isDark ? 'dark' : 'light';
+
+    document.documentElement.setAttribute('data-theme', effectiveTheme);
+    document.documentElement.setAttribute('data-theme-setting', nextSetting);
+
+    updateToggleAccessibility(nextSetting, effectiveTheme);
+  }
+
   function handleThemeToggle(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    const stored = localStorage.getItem('theme');
+    const currentSetting = (stored === 'light' || stored === 'dark' || stored === 'system') ? stored : 'system';
     
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme') || 'light';
-    const next = current === 'light' ? 'dark' : 'light';
-    
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    // Cycle: light -> dark -> system -> light
+    let nextSetting = 'dark';
+    if (currentSetting === 'light') {
+      nextSetting = 'dark';
+    } else if (currentSetting === 'dark') {
+      nextSetting = 'system';
+    } else {
+      nextSetting = 'light';
+    }
+
+    applyThemeSetting(nextSetting);
   }
 
   function setupThemeToggle() {
     const btn = document.getElementById('theme-toggle');
-    if (btn) {
-      // Remove existing listeners by cloning
-      const newBtn = btn.cloneNode(true);
-      btn.parentNode.replaceChild(newBtn, btn);
-      newBtn.addEventListener('click', handleThemeToggle);
-    }
+    if (!btn) return;
+
+    const stored = localStorage.getItem('theme');
+    const setting = (stored === 'light' || stored === 'dark' || stored === 'system') ? stored : 'system';
+    const effectiveTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateToggleAccessibility(setting, effectiveTheme);
+
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    newBtn.addEventListener('click', handleThemeToggle);
   }
 
   // Setup on initial load
@@ -162,4 +220,12 @@ const getPath = (path) => {
   
   // Re-setup after Astro navigation
   document.addEventListener('astro:page-load', setupThemeToggle);
+
+  // Listen to system theme change event from Layout
+  window.addEventListener('theme-change', () => {
+    const stored = localStorage.getItem('theme');
+    const setting = (stored === 'light' || stored === 'dark' || stored === 'system') ? stored : 'system';
+    const effectiveTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateToggleAccessibility(setting, effectiveTheme);
+  });
 </script>
